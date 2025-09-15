@@ -8,7 +8,7 @@ public class Marksheet {
 	    private int physics;
 	    private int chemistry;
 	    private int math;
-	    private String gender;
+	    private char gender;
 	    private Date dob;
 	    private long mob;
 	    private String emailID;
@@ -29,7 +29,7 @@ public class Marksheet {
 	public void setChemistry(int che){
 		 this.chemistry = che;
 	}
-	public void setGender(String gender){
+	public void setGender(char gender){
 		 this.gender = gender;
 	}
 	public void setDob(Date dob){
@@ -56,7 +56,7 @@ public class Marksheet {
 	public int getChemistry(){
 		 return chemistry;
 	}
-	public String getGender(){
+	public char getGender(){
 		 return gender;
 	}
 	public Date getDob(){
@@ -69,5 +69,6 @@ public class Marksheet {
 		 return emailID;
 	}
 	}
+
 
 

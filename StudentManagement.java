@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 public class StudentManagement {
 	
     static Scanner sc = new Scanner(System.in);
@@ -18,35 +19,35 @@ public class StudentManagement {
     public static void start() {
         int choice;
         while (true) {
-        	System.out.println("╔════════════════════════════════════╗");
-        	System.out.println("║    Marksheet Management Menu       ║");
-        	System.out.println("╠════════════════════════════════════╣");
-        	System.out.println("║ 1.  Add Student                    ║");
-        	System.out.println("║ 2.  Remove Student by Roll No.     ║");
-        	System.out.println("║ 3.  Remove Student by Email ID     ║");
-        	System.out.println("║ 4.  Update                         ║");
-        	System.out.println("║ 5.  Update All                     ║");
-        	System.out.println("║ 6.  Delete All                     ║");
-        	System.out.println("║ 7.  Delete                         ║");
-        	System.out.println("║ 8.  Get                            ║");
-        	System.out.println("║ 9.  Get All                        ║");
-        	System.out.println("║ 10. Get Merit List                 ║");
-        	System.out.println("║ 11. Number of Students             ║");
-        	System.out.println("║ 12. getFailedStudentList           ║");
-        	System.out.println("║ 13. getAbsentees                   ║");
-        	System.out.println("║ 14. getTopper                      ║");
-        	System.out.println("║ 15. getLowestMarkesStudent         ║");
-        	System.out.println("║ 16. getATKTStudents                ║");
-        	System.out.println("║ 17. getCutoff                      ║");
-        	System.out.println("║ 18. getNumberOfBoysPass            ║");
-        	System.out.println("║ 19. getNumberOfGirlsPass           ║");
-        	System.out.println("║ 20. getGradeOfStudent              ║");
-        	System.out.println("║ 21. getTotalNumberOfGirls          ║");
-        	System.out.println("║ 22. getTotalNumberOfBoys           ║");
-        	System.out.println("║ 23. getAverageResultOfGirls        ║");
-        	System.out.println("║ 24. getAverageResultOfBoys         ║");
-        	System.out.println("║ 25. Exit                           ║");
-        	System.out.println("╚════════════════════════════════════╝");
+        	System.out.println("======================================");
+        	System.out.println("|    Marksheet Management Menu       |");
+        	System.out.println("======================================");
+        	System.out.println("| 1.  Add Student                    |");
+        	System.out.println("| 2.  Remove Student by Roll No.     |");
+        	System.out.println("| 3.  Remove Student by Email ID     |");
+        	System.out.println("| 4.  Update                         |");
+        	System.out.println("| 5.  Update All                     |");
+        	System.out.println("| 6.  Delete All                     |");
+        	System.out.println("| 7.  Delete                         |");
+        	System.out.println("| 8.  Get                            |");
+        	System.out.println("| 9.  Get All                        |");
+        	System.out.println("| 10. Get Merit List                 |");
+        	System.out.println("| 11. Number of Students             |");
+        	System.out.println("| 12. getFailedStudentList           |");
+        	System.out.println("| 13. getAbsentees                   |");
+        	System.out.println("| 14. getTopper                      |");
+        	System.out.println("| 15. getLowestMarkesStudent         |");
+        	System.out.println("| 16. getATKTStudents                |");
+        	System.out.println("| 17. getCutoff                      |");
+        	System.out.println("| 18. getNumberOfBoysPass            |");
+        	System.out.println("| 19. getNumberOfGirlsPass           |");
+        	System.out.println("| 20. getGradeOfStudent              |");
+        	System.out.println("| 21. getTotalNumberOfGirls          |");
+        	System.out.println("| 22. getTotalNumberOfBoys           |");
+        	System.out.println("| 23. getAverageResultOfGirls        |");
+        	System.out.println("| 24. getAverageResultOfBoys         |");
+        	System.out.println("| 25. Exit                           |");
+        	System.out.println("======================================");
         	
         	while (true) {
         	    try {
@@ -55,11 +56,10 @@ public class StudentManagement {
         	        sc.nextLine(); 
         	        break; 
         	    } catch (InputMismatchException e) {
-        	        System.err.println("❌ Invalid choice! Please enter only a number (1-25).\n");
+        	        System.err.println("Invalid choice! Please enter only a number (1-25).\n");
         	        sc.nextLine(); 
         	    }
         	}
-
             switch (choice) {
                 case 1:
                     addStudent();       
@@ -104,7 +104,7 @@ public class StudentManagement {
                 	showTopper();
                 	break;
                 case 15:
-                	showLowestMarksStudent();
+                	showLowestMarksStudents();
                 	break;
                 case 16:
                     showATKTStudents();
@@ -119,7 +119,7 @@ public class StudentManagement {
                 	showGirlsPassCount();
                 	break;
                 case 20:
-                    showStudentGrade(); // only call the method
+                    showStudentGrade(); 
                     break;
                 case 21:
                 	showTotalNumberOfGirls();
@@ -162,9 +162,9 @@ public class StudentManagement {
 
         return prefix + nextId;
     }
+	//add
 	public static void addStudent() {
 	    Scanner sc = new Scanner(System.in);
-	    MarksheetDAO dao = new MarksheetDAO();  
 
 	    Marksheet m = new Marksheet();
 
@@ -178,7 +178,7 @@ public class StudentManagement {
 	    m.setMob(ValidationUtils.validateMobile(sc));
 	    m.setEmailID(ValidationUtils.validateEmail(sc));
 
-	    boolean status = dao.add(m);
+	    boolean status = model.add(m);
 	    if (status) {
 	        System.out.println("Student added successfully!");
 	    } else {
@@ -206,7 +206,7 @@ public class StudentManagement {
                 rs = ps.executeQuery();
 
                 if (!rs.next()) {
-                    System.err.println("❌ Roll No " + rollNo + " does not exist! Please try again.");
+                    System.err.println("Roll No " + rollNo + " does not exist! Please try again.\n");
                     continue; 
                 }
 
@@ -265,7 +265,7 @@ public class StudentManagement {
                 rs = ps.executeQuery();
 
                 if (!rs.next()) {
-                    System.err.println("❌ Email " + email + " does not exist! Please try again.");
+                    System.err.println("Email " + email + " does not exist! Please try again.");
                     continue; 
                 }
 
@@ -342,9 +342,9 @@ public class StudentManagement {
                         choice = sc.nextInt();
                         sc.nextLine();
                         if (choice >= 1 && choice <= 8) break;
-                        else System.err.println("Invalid choice! Enter between 1-8.");
+                        else System.err.println("Invalid choice! Enter between 1-8.\n");
                     } catch (InputMismatchException e) {
-                        System.err.println("Invalid input! Please enter a number.");
+                        System.err.println("Invalid input! Please enter a number.\n");
                         sc.nextLine();
                     }
                 }
@@ -371,7 +371,6 @@ public class StudentManagement {
 
                     case 3: 
                         LocalDate dobLocal = ValidationUtils.validateDOB(sc);
-                        
                         java.sql.Date dob = java.sql.Date.valueOf(dobLocal);
 
                         sql = "UPDATE Student_info SET dob=? WHERE rollNo=?";
@@ -382,11 +381,11 @@ public class StudentManagement {
 
 
                     case 4: 
-                        String gender = ValidationUtils.validateGender(sc);
+                        char gender = ValidationUtils.validateGender(sc);
                         sql = "UPDATE Student_info SET gender=? WHERE rollNo=?";
                         ps = conn.prepareStatement(sql);
-                        ps.setString(1, gender);
-                        ps.setString(2, rollNo);
+                        ps.setString(1, String.valueOf(gender)); 
+                        ps.setString(2, rollNo);                  
                         break;
 
                     case 5: //phy
@@ -431,16 +430,28 @@ public class StudentManagement {
         System.out.print("Enter Roll No of the student to update: ");
         String rollNo = sc.nextLine().trim();
 
+        
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM Student_info WHERE rollNo = ?")) {
+            
+            ps.setString(1, rollNo);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            
+            if (rs.getInt(1) == 0) {
+                System.err.println("Roll No not found! Update cancelled.");
+                return; // stop function
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        
         Marksheet m = new Marksheet();
         m.setRollNo(rollNo);
-
-        
         m.setName(ValidationUtils.validateName(sc));
-
-        
-        m.setEmailID(ValidationUtils.validateEmail(sc)); // create overloaded method with rollNo to check uniqueness
-
-       
+        m.setEmailID(ValidationUtils.validateEmail(sc));
         LocalDate dobLocal = ValidationUtils.validateDOB(sc);
         m.setDob(java.sql.Date.valueOf(dobLocal));
         m.setGender(ValidationUtils.validateGender(sc));
@@ -448,10 +459,12 @@ public class StudentManagement {
         m.setChemistry(ValidationUtils.validateMarks(sc, "Chemistry"));
         m.setMath(ValidationUtils.validateMarks(sc, "Math"));
         m.setMob(ValidationUtils.validateMobile(sc));
+
         boolean updated = model.updateAll(m);
         if (updated) System.out.println("Student updated successfully!");
         else System.err.println("Failed to update student.");
     }
+
 
     public static boolean deleteAll() {
         Scanner sc = new Scanner(System.in);
@@ -556,24 +569,28 @@ public class StudentManagement {
         while (true) {
             System.out.print("Enter Roll No to Search: ");
             String rollNo = sc.nextLine().trim();
-
-            MarksheetDAO dao = new MarksheetDAO();
-            ArrayList<Marksheet> list = dao.get(rollNo);
+            MarksheetModel model = new MarksheetModel();
+            ArrayList<Marksheet> list = model.get(rollNo);
 
             if (list.isEmpty()) {
                 System.err.println("No record found for Roll No: " + rollNo + "\n");
                 System.out.println("Please try again...\n");
             } else {
-                System.out.println("Student Record Found:");
+                System.out.println("Student Record Found -");
                 for (Marksheet m : list) {
+                    
+                    String phy = (m.getPhysics() == -1) ? "A" : String.valueOf(m.getPhysics());
+                    String chem = (m.getChemistry() == -1) ? "A" : String.valueOf(m.getChemistry());
+                    String math = (m.getMath() == -1) ? "A" : String.valueOf(m.getMath());
+
                     System.out.println("Roll No : " + m.getRollNo());
                     System.out.println("Name    : " + m.getName());
                     System.out.println("Email   : " + m.getEmailID());
                     System.out.println("DOB     : " + m.getDob());
                     System.out.println("Gender  : " + m.getGender());
-                    System.out.println("Physics : " + m.getPhysics());
-                    System.out.println("Chem    : " + m.getChemistry());
-                    System.out.println("Math    : " + m.getMath());
+                    System.out.println("Physics : " + phy);
+                    System.out.println("Chem    : " + chem);
+                    System.out.println("Math    : " + math);
                     System.out.println("Mobile  : " + m.getMob());
                     System.out.println("-------------------------------");
                 }
@@ -582,12 +599,12 @@ public class StudentManagement {
         }
     }
 
-        
-    public static void showAllStudents() {
-        MarksheetDAO dao = new MarksheetDAO();
-        ArrayList<Marksheet> list = dao.getAll();
 
-        if (list.isEmpty()) {
+    public static void showAllStudents() {
+        MarksheetModel model = new MarksheetModel();
+        Set<Marksheet> set = model.getAll();
+        
+        if (set.isEmpty()) {
             System.err.println("No student records found in database!");
         } else {
             System.out.println("==========================================================================================================================");
@@ -595,34 +612,39 @@ public class StudentManagement {
                     "Roll No", "Name", "Email", "DOB", "Gender", "Physics", "Chem", "Math", "Mobile");
             System.out.println("==========================================================================================================================");
 
-            for (Marksheet m : list) {
-                System.out.printf("%-10s %-20s %-25s %-12s %-8s %-8d %-8d %-8d %-15s%n",
+            for (Marksheet m : set) {   // Set pe iterate kar rahe hai
+                String phy = (m.getPhysics() == -1) ? "A" : String.valueOf(m.getPhysics());
+                String chem = (m.getChemistry() == -1) ? "A" : String.valueOf(m.getChemistry());
+                String math = (m.getMath() == -1) ? "A" : String.valueOf(m.getMath());
+
+                System.out.printf("%-10s %-20s %-25s %-12s %-8s %-8s %-8s %-8s %-15s%n",
                         m.getRollNo(),
                         m.getName(),
                         m.getEmailID(),
                         m.getDob(),
                         m.getGender(),
-                        m.getPhysics(),
-                        m.getChemistry(),
-                        m.getMath(),
+                        phy,
+                        chem,
+                        math,
                         m.getMob());
             }
-
             System.out.println("==========================================================================================================================");
         }
     }
+
+
 
         public static void showMeritList() {
             try {
                 MarksheetModel model = new MarksheetModel();
                 LinkedList<Marksheet> meritList = model.getMeritList();
 
-                System.out.println("\n===== Top 10 Students (Merit List) =====");
+                System.out.println("\n===== Top 5 Students (Merit List) =====");
                 System.out.printf("%-12s %-20s %-25s %-12s %-8s %-8s %-8s %-15s\n",
                         "RollNo", "Name", "EmailID", "DOB", "Physics", "Chemistry", "Math", "Mobile");
 
                 for (Marksheet m : meritList) {
-                    System.out.printf("%-10s %-20s %-25s %-12s %-8d %-8d %-8d %-12d\n",
+                    System.out.printf("%-10s %-20s %-25s %-12s %-8d %-9d %-8d %-12d\n",
                             m.getRollNo(),
                             m.getName(),
                             m.getEmailID(),
@@ -646,35 +668,38 @@ public class StudentManagement {
                 e.printStackTrace();
             }
         }
+        //Failed student 
         public static void showFailedStudents() {
             try {
                 MarksheetModel model = new MarksheetModel();
                 LinkedHashSet<Marksheet> failedList = model.getFailedStudentList();
 
                 if (failedList.isEmpty()) {
-                    System.out.println("\n No failed students. Everyone passed!");
+                    System.out.println("\nNo failed students. Everyone passed!");
                 } else {
                     System.out.println("\n===== Failed Students List =====");
-                    System.out.printf("%-10s %-15s %-25s %-12s %-8s %-8s %-8s %-12s\n",
+                    System.out.printf("%-12s %-20s %-25s %-12s %-8s %-10s %-10s %-12s\n",
                             "RollNo", "Name", "EmailID", "DOB", "Physics", "Chemistry", "Math", "Mobile");
 
                     for (Marksheet m : failedList) {
-                        System.out.printf("%-10s %-20s %-25s %-12s %-8d %-8d %-8d %-12d\n",
+                        System.out.printf("%-12s %-20s %-25s %-12s %-8s %-10s %-10s %-12d\n",
                                 m.getRollNo(),
                                 m.getName(),
                                 m.getEmailID(),
-                                m.getDob(),
-                                m.getPhysics(),
-                                m.getChemistry(),
-                                m.getMath(),
+                                m.getDob(), // or format with DateTimeFormatter if needed
+                                (m.getPhysics() == -1 ? "A" : String.valueOf(m.getPhysics())),
+                                (m.getChemistry() == -1 ? "A" : String.valueOf(m.getChemistry())),
+                                (m.getMath() == -1 ? "A" : String.valueOf(m.getMath())),
                                 m.getMob());
                     }
                     System.out.println("=================================");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("Error fetching failed students: " + e.getMessage());
             }
         }
+
+        //absent student
         public static void showAbsentees() {
             try {
                 MarksheetModel model = new MarksheetModel();
@@ -684,18 +709,23 @@ public class StudentManagement {
                     System.out.println("\n No absentees found!");
                 } else {
                     System.out.println("\n===== Absentees List =====");
-                    System.out.printf("%-10s %-20s %-25s %-12s %-8s %-8s %-8s %-12s\n",
+                    System.out.printf("%-12s %-20s %-25s %-12s %-8s %-10s %-8s %-12s\n",
                             "RollNo", "Name", "EmailID", "DOB", "Physics", "Chemistry", "Math", "Mobile");
 
                     for (Marksheet m : absentees) {
-                        System.out.printf("%-10s %-15s %-25s %-12s %-8d %-8d %-8d %-12d\n",
+                        
+                        String phy = (m.getPhysics() == -1) ? "A" : String.valueOf(m.getPhysics());
+                        String chem = (m.getChemistry() == -1) ? "A" : String.valueOf(m.getChemistry());
+                        String math = (m.getMath() == -1) ? "A" : String.valueOf(m.getMath());
+
+                        System.out.printf("%-10s %-20s %-25s %-12s %-8s %-10s %-8s %-12d\n",
                                 m.getRollNo(),
                                 m.getName(),
                                 m.getEmailID(),
                                 m.getDob(),
-                                m.getPhysics(),
-                                m.getChemistry(),
-                                m.getMath(),
+                                phy,
+                                chem,
+                                math,
                                 m.getMob());
                     }
                     System.out.println("==================================");
@@ -736,51 +766,85 @@ public class StudentManagement {
             }
         }
      // Lowest scorer
-        public static void showLowestMarksStudent() {
+        public static void showLowestMarksStudents() {
             try {
                 MarksheetModel model = new MarksheetModel();
-                String[][] data = model.getLowestMarkesStudent();
+                Set<Marksheet> set = model.getAll();
 
-                if (data == null) {
-                    System.out.println("\n  No data found!");
+                if (set.isEmpty()) {
+                    System.err.println("No student records found in database!");
                 } else {
-                    System.out.println("\n===== Lowest Marks Student =====");
-                    System.out.printf("%-10s %-20s %-25s %-12s %-8s %-8s %-8s %-8s %-12s\n",
+                    System.out.println("\n===== Students with Marks < 50 in All Subjects =====");
+                    System.out.printf("%-12s %-20s %-25s %-12s %-8s %-8s %-10s %-10s %-15s%n",
                             "RollNo", "Name", "EmailID", "DOB", "Gender",
                             "Physics", "Chemistry", "Math", "Mobile");
 
-                    System.out.printf("%-10s %-15s %-25s %-12s %-8s %-8s %-8s %-8s %-12s\n",
-                            data[0][0], data[0][1], data[0][2], data[0][3], data[0][4],
-                            data[0][5], data[0][6], data[0][7], data[0][8]);
-                    System.out.println("=================================");
+                    for (Marksheet m : set) {
+                        int phy = m.getPhysics();
+                        int chem = m.getChemistry();
+                        int math = m.getMath();
+
+                        // Only those students who got <50 in all subjects
+                        if (phy < 50 && chem < 50 && math < 50) {
+                            System.out.printf("%-12s %-20s %-25s %-12s %-8s %-8s %-10s %-10s %-15s%n",
+                                    m.getRollNo(),
+                                    m.getName(),
+                                    m.getEmailID(),
+                                    m.getDob(),
+                                    m.getGender(),
+                                    (phy == -1 ? "A" : String.valueOf(phy)),
+                                    (chem == -1 ? "A" : String.valueOf(chem)),
+                                    (math == -1 ? "A" : String.valueOf(math)),
+                                    m.getMob());
+                        }
+                    }
+                    System.out.println("========================================================");
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        // ATKT students
+     // ATKT students
         public static void showATKTStudents() {
             try {
                 MarksheetModel model = new MarksheetModel();
-                List<Marksheet> atktList = model.getATKTStudents();
+                Set<Marksheet> set = model.getAll();
+                List<Marksheet> allStudents = new ArrayList<>(set);
+                List<Marksheet> atktList = new ArrayList<>();
+
+                for (Marksheet m : allStudents) {
+                    int failCount = 0;
+
+                    int phy = m.getPhysics();
+                    int chem = m.getChemistry();
+                    int math = m.getMath();
+
+                    if (phy == -1 || phy < 33) failCount++;
+                    if (chem == -1 || chem < 33) failCount++;
+                    if (math == -1 || math < 33) failCount++;
+                    if (failCount == 1 || failCount == 2) {
+                        atktList.add(m);
+                    }
+                }
 
                 if (atktList.isEmpty()) {
-                    System.out.println("\n No ATKT students!");
+                    System.out.println("\nNo ATKT students!");
                 } else {
                     System.out.println("\n===== ATKT Students =====");
-                    System.out.printf("%-10s %-15s %-25s %-12s %-8s %-8s %-8s %-12s\n",
+                    System.out.printf("%-12s %-20s %-25s %-12s %-8s %-10s %-10s %-12s\n",
                             "RollNo", "Name", "EmailID", "DOB", "Physics", "Chemistry", "Math", "Mobile");
 
                     for (Marksheet m : atktList) {
-                        System.out.printf("%-10s %-20s %-25s %-12s %-8d %-8d %-8d %-12d\n",
+                        System.out.printf("%-12s %-20s %-25s %-12s %-8s %-10s %-10s %-12d\n",
                                 m.getRollNo(),
                                 m.getName(),
                                 m.getEmailID(),
                                 m.getDob(),
-                                m.getPhysics(),
-                                m.getChemistry(),
-                                m.getMath(),
+                                (m.getPhysics() == -1 ? "A" : String.valueOf(m.getPhysics())),
+                                (m.getChemistry() == -1 ? "A" : String.valueOf(m.getChemistry())),
+                                (m.getMath() == -1 ? "A" : String.valueOf(m.getMath())),
                                 m.getMob());
                     }
                     System.out.println("=================================");
@@ -789,6 +853,9 @@ public class StudentManagement {
                 e.printStackTrace();
             }
         }
+
+
+        //cut off student 
         public static void showCutoff() {
             try {
                 MarksheetModel model = new MarksheetModel();
@@ -833,14 +900,14 @@ public class StudentManagement {
                 rollNo = sc.nextLine().trim();
 
                 try {
-                    // Check if rollNo exists
-                    if (model.get(rollNo).isEmpty()) { // assuming get() returns a List
+                   
+                    if (model.get(rollNo).isEmpty()) { 
                         System.err.println("Roll No does not exist in database! Please try again.\n");
                     } else {
-                        // Valid roll number found, display grade
+                   
                         char grade = model.getGradeOfStudent(rollNo);
                         System.out.println("\nGrade of Student (Roll No: " + rollNo + ") = " + grade);
-                        break; // exit loop after successful display
+                        break;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -858,7 +925,7 @@ public class StudentManagement {
                 e.printStackTrace();
             }
         }
-     // Show Total Number of Boys
+     //Total Number of Boys
         public static void showTotalNumberOfBoys() {
             try {
                 MarksheetModel model = new MarksheetModel();
@@ -868,7 +935,7 @@ public class StudentManagement {
                 e.printStackTrace();
             }
         }
-     // Show Average Result of Girls
+     // Average Result of Girls
         public static void showAverageResultOfGirls() {
             try {
                 MarksheetModel model = new MarksheetModel();
@@ -878,7 +945,7 @@ public class StudentManagement {
                 e.printStackTrace();
             }
         }
-     // Show Average Result of Boys
+     // Average Result of Boys
         public static void showAverageResultOfBoys() {
             try {
                 MarksheetModel model = new MarksheetModel();

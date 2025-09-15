@@ -10,7 +10,7 @@ public interface MarksheetModelInterface {
 	    public boolean deleteAll();
 	    public boolean delete(String rollNo);
 	    public ArrayList<Marksheet> get(String rollNo);
-	    public ArrayList<Marksheet> getAll();
+	    public Set<Marksheet> getAll();
 	    public LinkedList<Marksheet> getMeritList();
 	    public int numberOfStudents();
 	    public LinkedHashSet<Marksheet> getFailedStudentList();
@@ -29,5 +29,6 @@ public interface MarksheetModelInterface {
 	}
 
 	
+
 
 

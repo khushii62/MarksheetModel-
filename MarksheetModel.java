@@ -1,6 +1,6 @@
 package com.thrivesup.marksheet;
 
-import java.sql.ResultSet;
+    import java.sql.ResultSet;
 	import java.util.ArrayList;
 	import java.util.List;
 	import java.util.*;
@@ -10,35 +10,38 @@ import java.sql.ResultSet;
 
 public class MarksheetModel implements MarksheetModelInterface {
 
-	        @Override
-	        public boolean add(Marksheet m) {
-	            boolean isInserted = false;
-	            try (Connection con = DBUtil.getConnection()) {
-	                String sql = "INSERT INTO Student_info (rollNo, name, physics, chemistry, math, gender, dob, mob, emailID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	                PreparedStatement ps = con.prepareStatement(sql);
+	@Override  
+	public boolean add(Marksheet m) {
+	    boolean status = false;
+	    try {
+	        Connection con = DBUtil.getConnection();
+	        String sql = "INSERT INTO Student_info (rollNo, name, physics, chemistry, math, gender, dob, mob, emailID) " +
+	                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	        PreparedStatement ps = con.prepareStatement(sql);
 
-	                ps.setString(1, m.getRollNo());
-	                ps.setString(2, m.getName());
-	                ps.setInt(3, m.getPhysics());
-	                ps.setInt(4, m.getChemistry());
-	                ps.setInt(5, m.getMath());
-	                ps.setString(6, m.getGender());
-	                ps.setDate(7, m.getDob());
-	                ps.setLong(8, m.getMob());
-	                ps.setString(9, m.getEmailID());
+	        ps.setString(1, m.getRollNo());
+	        ps.setString(2, m.getName());
+	        ps.setInt(3, m.getPhysics());
+	        ps.setInt(4, m.getChemistry());
+	        ps.setInt(5, m.getMath());
+	        ps.setString(6, String.valueOf(m.getGender()));  
+	        ps.setDate(7, m.getDob());
+	        ps.setLong(8, m.getMob());
+	        ps.setString(9, m.getEmailID());
 
-	                int rows = ps.executeUpdate();
-	                if (rows > 0) {
-	                    isInserted = true;
-	                    System.out.println("Student added successfully!");
-	                }
-	            }
-	            catch(SQLException sqle){
-	               sqle.printStackTrace();
-	            }
-	            return isInserted;
+	        int rows = ps.executeUpdate();
+	        if (rows > 0) {
+	            status = true;
 	        }
 
+	        ps.close();
+	        con.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return status;
+	}
+	 
 	        @Override
 	        public boolean deleteByRollNo(String rollNo) {
 	            boolean status = false;
@@ -52,7 +55,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                }
 	                ps.close();
 	                conn.close();
-	            } catch (Exception e) {
+	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
 	            return status;
@@ -60,7 +63,6 @@ public class MarksheetModel implements MarksheetModelInterface {
 
 	        @Override
 	        public boolean deleteByEmailId(String email) {
-	            // delete by email
 	        	  boolean status = false;
 		            try {
 		                Connection conn = DBUtil.getConnection();
@@ -72,7 +74,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 		                }
 		                ps.close();
 		                conn.close();
-		            } catch (Exception e) {
+		            } catch (SQLException e) {
 		                e.printStackTrace();
 		            }
 		            return status;
@@ -86,12 +88,6 @@ public class MarksheetModel implements MarksheetModelInterface {
 
 	                String sql = "UPDATE Student_info SET name = ?, email = ? WHERE rollNo = ?";
 	                PreparedStatement ps = conn.prepareStatement(sql);
-
-	              
-	                ps.setString(1, "Updated Name");  
-	                ps.setString(2, "updatedemail@example.com");  
-	                ps.setString(3, rollNo);
-
 	                int count = ps.executeUpdate();
 	                if (count > 0) {
 	                    status = true;
@@ -99,7 +95,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 
 	                ps.close();
 	                conn.close();
-	            } catch (Exception e) {
+	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
 	            return status;
@@ -116,7 +112,8 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                ps.setString(1, m.getName());
 	                ps.setString(2, m.getEmailID());
 	                ps.setDate(3, m.getDob());
-	                ps.setString(4, m.getGender());
+	               // ps.setString(4, m.getGender());
+	                ps.setString(4, String.valueOf(m.getGender())); 
 	                ps.setInt(5, m.getPhysics());
 	                ps.setInt(6, m.getChemistry());
 	                ps.setInt(7, m.getMath());
@@ -130,7 +127,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 
 	                ps.close();
 	                conn.close();
-	            } catch (Exception e) {
+	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
 	            return status;
@@ -149,7 +146,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 		                }
 		                ps.close();
 		                conn.close();
-		            } catch (Exception e) {
+		            } catch (SQLException e) {
 		                e.printStackTrace();
 		            }
 		            return status;
@@ -168,7 +165,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 		                }
 		                ps.close();
 		                conn.close();
-		            } catch (Exception e) {
+		            } catch (SQLException e) {
 		                e.printStackTrace();
 		            }
 		            return status;
@@ -191,7 +188,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                    m.setName(rs.getString("name"));
 	                    m.setEmailID(rs.getString("emailID"));
 	                    m.setDob(rs.getDate("dob"));
-	                    m.setGender(rs.getString("gender"));
+	                    m.setGender(rs.getString("gender").charAt(0));
 	                    m.setPhysics(rs.getInt("physics"));
 	                    m.setChemistry(rs.getInt("chemistry"));
 	                    m.setMath(rs.getInt("math"));
@@ -201,20 +198,18 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                rs.close();
 	                ps.close();
 	                conn.close();
-	            } catch (Exception e) {
+	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
 	            return list;
 	        }
 
 	        @Override
-	        public ArrayList<Marksheet> getAll() {
-	            ArrayList<Marksheet> list = new ArrayList<>();
-	            try {
-	                Connection conn = DBUtil.getConnection();
-	                String sql = "SELECT * FROM student_info";
-	                PreparedStatement ps = conn.prepareStatement(sql);
-	                ResultSet rs = ps.executeQuery();
+	        public Set<Marksheet> getAll() {
+	            Set<Marksheet> set = new HashSet<>();
+	            try (Connection conn = DBUtil.getConnection();
+	                 PreparedStatement ps = conn.prepareStatement("SELECT * FROM Student_info");
+	                 ResultSet rs = ps.executeQuery()) {
 
 	                while (rs.next()) {
 	                    Marksheet m = new Marksheet();
@@ -222,20 +217,18 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                    m.setName(rs.getString("name"));
 	                    m.setEmailID(rs.getString("emailID"));
 	                    m.setDob(rs.getDate("dob"));
-	                    m.setGender(rs.getString("gender"));
+	                    m.setGender(rs.getString("gender").charAt(0));
 	                    m.setPhysics(rs.getInt("physics"));
 	                    m.setChemistry(rs.getInt("chemistry"));
 	                    m.setMath(rs.getInt("math"));
 	                    m.setMob(rs.getLong("mob"));
-	                    list.add(m);
+	                    set.add(m);
 	                }
-	                rs.close();
-	                ps.close();
-	                conn.close();
-	            } catch (Exception e) {
+
+	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
-	            return list;
+	            return set;
 	        }
 
 	        @Override
@@ -244,7 +237,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	            try {
 	                Connection conn = DBUtil.getConnection();
 	                
-	                String sql = "SELECT *, (physics + chemistry + math) AS total FROM Student_info ORDER BY total DESC LIMIT 10";
+	                String sql = "SELECT *, (physics + chemistry + math) AS total FROM Student_info ORDER BY total DESC LIMIT 5";
 	                PreparedStatement ps = conn.prepareStatement(sql);
 	                ResultSet rs = ps.executeQuery();
 
@@ -254,7 +247,8 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                    m.setName(rs.getString("name"));
 	                    m.setEmailID(rs.getString("emailID"));
 	                    m.setDob(rs.getDate("dob"));
-	                    m.setGender(rs.getString("gender"));
+	                   // m.setGender(rs.getString("gender"));
+	                    m.setGender(rs.getString("gender").charAt(0));
 	                    m.setPhysics(rs.getInt("physics"));
 	                    m.setChemistry(rs.getInt("chemistry"));
 	                    m.setMath(rs.getInt("math"));
@@ -264,7 +258,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                rs.close();
 	                ps.close();
 	                conn.close();
-	            } catch (Exception e) {
+	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
 	            return meritList;
@@ -283,7 +277,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                rs.close();
 	                ps.close();
 	                conn.close();
-	            } catch (Exception e) {
+	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
 	            return count;
@@ -292,34 +286,32 @@ public class MarksheetModel implements MarksheetModelInterface {
 	        @Override
 	        public LinkedHashSet<Marksheet> getFailedStudentList() {
 	            LinkedHashSet<Marksheet> failedStudents = new LinkedHashSet<>();
-	            try {
-	                Connection conn = DBUtil.getConnection();
-	               
-	                PreparedStatement ps = conn.prepareStatement(
-	                    "SELECT * FROM Student_info WHERE physics < 33 OR chemistry < 33 OR math < 33"
-	                );
-	                ResultSet rs = ps.executeQuery();
+	            try (Connection conn = DBUtil.getConnection();
+	                 PreparedStatement ps = conn.prepareStatement(
+	                     "SELECT * FROM Student_info WHERE physics < 33 AND chemistry < 33 AND math < 33"
+	                 );
+	                 ResultSet rs = ps.executeQuery()) {
+
 	                while (rs.next()) {
 	                    Marksheet m = new Marksheet();
 	                    m.setRollNo(rs.getString("rollNo"));
 	                    m.setName(rs.getString("name"));
 	                    m.setEmailID(rs.getString("emailID"));
 	                    m.setDob(rs.getDate("dob"));
-	                    m.setGender(rs.getString("gender"));
+	                    m.setGender(rs.getString("gender").charAt(0));
 	                    m.setPhysics(rs.getInt("physics"));
 	                    m.setChemistry(rs.getInt("chemistry"));
 	                    m.setMath(rs.getInt("math"));
 	                    m.setMob(rs.getLong("mob"));
 	                    failedStudents.add(m);
 	                }
-	                rs.close();
-	                ps.close();
-	                conn.close();
-	            } catch (Exception e) {
+
+	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
 	            return failedStudents;
 	        }
+
         
 	        @Override
 	        public ArrayList<Marksheet> getAbsentees() {
@@ -337,7 +329,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                    m.setName(rs.getString("name"));
 	                    m.setEmailID(rs.getString("emailID"));
 	                    m.setDob(rs.getDate("dob"));
-	                    m.setGender(rs.getString("gender"));
+	                    m.setGender(rs.getString("gender").charAt(0));
 	                    m.setPhysics(rs.getInt("physics"));
 	                    m.setChemistry(rs.getInt("chemistry"));
 	                    m.setMath(rs.getInt("math"));
@@ -368,7 +360,8 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                    m.setName(rs.getString("name"));
 	                    m.setEmailID(rs.getString("emailID"));
 	                    m.setDob(rs.getDate("dob"));
-	                    m.setGender(rs.getString("gender"));
+	                    //m.setGender(rs.getString("gender"));
+	                    m.setGender(rs.getString("gender").charAt(0));
 	                    m.setPhysics(rs.getInt("physics"));
 	                    m.setChemistry(rs.getInt("chemistry"));
 	                    m.setMath(rs.getInt("math"));
@@ -397,7 +390,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                ResultSet rs = ps.executeQuery();
 
 	                if (rs.next()) {
-	                    data = new String[1][9]; // 9 columns
+	                    data = new String[1][9]; 
 	                    data[0][0] = rs.getString("rollNo");
 	                    data[0][1] = rs.getString("name");
 	                    data[0][2] = rs.getString("emailID");
@@ -424,9 +417,9 @@ public class MarksheetModel implements MarksheetModelInterface {
 	            try {
 	                Connection conn = DBUtil.getConnection();
 	                String sql = "SELECT * FROM Student_info WHERE " +
-	                             "((physics < 33 AND chemistry >= 33 AND math >= 33) " +
-	                             "OR (chemistry < 33 AND physics >= 33 AND math >= 33) " +
-	                             "OR (math < 33 AND physics >= 33 AND chemistry >= 33))";
+	                        "((CASE WHEN (physics < 33 OR physics = -1) THEN 1 ELSE 0 END) + " +
+	                        " (CASE WHEN (chemistry < 33 OR chemistry = -1) THEN 1 ELSE 0 END) + " +
+	                        " (CASE WHEN (math < 33 OR math = -1) THEN 1 ELSE 0 END)) IN (1,2)";
 	                PreparedStatement ps = conn.prepareStatement(sql);
 	                ResultSet rs = ps.executeQuery();
 
@@ -436,7 +429,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                    m.setName(rs.getString("name"));
 	                    m.setEmailID(rs.getString("emailID"));
 	                    m.setDob(rs.getDate("dob"));
-	                    m.setGender(rs.getString("gender"));
+	                    m.setGender(rs.getString("gender").charAt(0));
 	                    m.setPhysics(rs.getInt("physics"));
 	                    m.setChemistry(rs.getInt("chemistry"));
 	                    m.setMath(rs.getInt("math"));
@@ -452,6 +445,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	            }
 	            return list;
 	        }
+
 	        
 	        @Override
 	        public double getCutoff() {
@@ -469,6 +463,8 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                        cutoff = 0.0; 
 	                    }
 	                }
+	                rs.close();
+	                ps.close();     
 	                conn.close();
 	            } catch (Exception e) {
 	                e.printStackTrace();
@@ -535,7 +531,7 @@ public class MarksheetModel implements MarksheetModelInterface {
 	                    if (avg >= 85) grade = 'A';
 	                    else if (avg >= 70) grade = 'B';
 	                    else if (avg >= 50) grade = 'C';
-	                    else if (avg >= 40) grade = 'D';
+	                    else if (avg >= 33) grade = 'D';
 	                    else grade = 'F';
 	                }
 	            } catch (Exception e) {
